@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <limits>
-#include "to_do_header_file.h"
+#include "todo_headerFile.h"
 #include <cstdlib>
 
 void manager::emplace_task(std::string &title, std::string &description)
@@ -52,28 +52,34 @@ void manager::mark_pending(const int &id)
     }
 }
 
-void manager::return_title(const int &id) const
+std::string manager::return_title(const int &id) const
 {
+    std::string temp;
 
     for (int i = 0; i < task_vector.size(); ++i)
     {
+        std::string temp;
         if (task_vector[i].return_id() == id)
         {
-            std::cout << task_vector[i].show_title();
-        }
-    }
-}
-
-void manager::return_description(const int &id) const
-{
-    for (int i = 0; i < task_vector.size(); ++i)
-    {
-        if (task_vector[i].return_id() == id)
-        {
-            std::cout << task_vector[i].show_description();
+            temp = task_vector[i].show_title();
             break;
         }
     }
+    return temp;
+}
+
+std::string manager::return_description(const int &id) const
+{
+    std::string temp;
+    for (int i = 0; i < task_vector.size(); ++i)
+    {
+        if (task_vector[i].return_id() == id)
+        {
+            temp = task_vector[i].show_description();
+            break;
+        }
+    }
+    return temp;
 }
 
 bool manager::return_status(const int &id) const
@@ -198,9 +204,9 @@ void console::remove_a_task()
 
             else if (todo_list.valid_id(id))
             {
-                std::cout << "The Task With Ttite: ";
-                todo_list.return_title(id);
-                std::cout << " will be deleted\n";
+                std::cout << "The Task With Ttite: '";
+                std::cout << todo_list.return_title(id);
+                std::cout << "' will be deleted\n";
                 std::cout << "Enter y for 'Yes' & Any other key for 'No'\n";
                 char choice;
                 std::cin >> choice;
@@ -266,16 +272,15 @@ void console::set_as_complete()
         {
             if (todo_list.return_status(id) == true)
             {
-                std::cout << "The task with ID NO. " << id << " & Title: ";
-                todo_list.return_title(id);
-                std::cout << "\nIs already Set as Completed\n";
+                std::cout << "The task with ID NO. " << id << " & Title: '" << todo_list.return_title(id) << "'\n";
+                std::cout << "Is already Set as Completed\n";
                 break;
             }
 
             else
             {
-                std::cout << "The Title of task you want to set as complete\nTitle: " << std::endl;
-                todo_list.return_title(id);
+                std::cout << "The Title of task you want to set as complete\nTitle: " << todo_list.return_title(id) << std::endl;
+
                 std::cout << "\nAre You Sure? Enter y for 'yes' and any other key for 'No'\n";
                 char choice;
                 std::cin >> choice;
@@ -347,15 +352,15 @@ void console::set_as_pending()
             if (todo_list.return_status(id) == false)
             {
                 std::cout << "The task with ID NO. " << id << " & Title: ";
-                todo_list.return_title(id);
+                std::cout << todo_list.return_title(id);
                 std::cout << "\nIs already Set as Pending\n";
                 break;
             }
 
             else if (todo_list.valid_id(id))
             {
-                std::cout << "The Title of task you want to set as Pending\nTitle: " << std::endl;
-                todo_list.return_title(id);
+                std::cout << "The Title of task you want to set as Pending\nTitle: " << todo_list.return_title(id);
+
                 std::cout << "\nAre You Sure? Enter y for 'yes' and any other key for 'No'\n";
                 char choice;
                 std::cin >> choice;
@@ -363,7 +368,7 @@ void console::set_as_pending()
                 {
                     todo_list.mark_pending(id);
 
-                    std::cout << "The Task Now Has Been Set as Completed!!\n";
+                    std::cout << "The Task Now Has Been Set as Pending!!\n";
                     break;
                 }
                 else
@@ -494,12 +499,9 @@ void console::view_or_edit()
             else if (todo_list.valid_id(id))
             {
                 std::string new_title, new_desc;
-                std::cout << "The Title of the task is: ";
-                todo_list.return_title(id);
+                std::cout << "The Title of the task is: " << todo_list.return_title(id) << "\n";
 
-                std::cout << "The Description of the task is: ";
-                todo_list.return_description(id);
-                std::cout << "\n";
+                std::cout << "\nThe Description of the task is: " << todo_list.return_description(id) << "\n";
 
                 std::cout << "Do You want to edit the Task Title\n If 'yes' enter y or any other key to decline\n";
                 char choice;
@@ -531,7 +533,7 @@ void console::view_or_edit()
                     std::getline(std::cin, new_desc);
                     if (new_desc.empty() != true)
                     {
-                        todo_list.set_new_title(id, new_desc);
+                        todo_list.set_new_description(id, new_desc);
                         break;
                     }
                     else
@@ -542,6 +544,7 @@ void console::view_or_edit()
                 }
                 else
                 {
+                    std::cout << "Exited from Editing\n";
                     break;
                 }
             }
