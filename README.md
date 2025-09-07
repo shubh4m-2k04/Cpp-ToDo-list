@@ -55,8 +55,7 @@ The nlohmann/json library is handled automatically by CMake and does not need to
 - Clone the repository:
 
 ```bash
-git clone <your-repository-url>
-cd <repository-folder-name>
+git clone https://github.com/shubh4m-2k04/Cpp-ToDo-list
 ````
 
 ---
