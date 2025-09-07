@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 class todo_data_type
 {
@@ -15,6 +17,8 @@ public:
     void set_id(int &m_id) { unique_id = m_id; }
     int return_id() const { return unique_id; }
 
+    void set_status(bool status) { completed = status; }
+
     bool is_completed() const { return completed; }
     void set_completed() { completed = true; }
     void set_pending() { completed = false; }
@@ -28,7 +32,12 @@ class manager
     int new_id = 1;
 
 public:
+    manager();
+
     void emplace_task(std::string &title, std::string &description);
+
+    void emplace_task(int id, std::string &title, std::string &description, bool status);
+
     void erase_task(const int &id);
     void mark_complete(const int &id);
     void mark_pending(const int &id);
@@ -44,22 +53,10 @@ public:
     int id_count() const;
 
     const std::vector<todo_data_type> &get_all_tasks() const;
-};
 
-class console
-{
-    manager todo_list;
+    // file i/o
+    void save_to_file() const;
+    void load_from_file();
 
-public:
-    void start_console();
-
-    void add_a_task();
-    void remove_a_task();
-    void view_or_edit();
-
-    void set_as_complete();
-    void set_as_pending();
-
-    void print_pending_tasks() const;
-    void print_all_tasks() const;
+    ~manager();
 };
